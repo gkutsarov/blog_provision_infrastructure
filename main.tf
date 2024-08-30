@@ -59,13 +59,6 @@ resource "aws_s3_bucket" "my-terraform-state-gk" {
   }
 }
 
-#SET BUCKET ACL
-resource "aws_s3_bucket_acl" "my-tf-state-bucket-ACL" {
-  bucket = aws_s3_bucket.my-terraform-state-gk.id
-  acl = "private"
-}
-
-
 resource "aws_s3_bucket_versioning" "my-terraform-state-gk" {
   bucket = aws_s3_bucket.my-terraform-state-gk.bucket
   

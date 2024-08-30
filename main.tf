@@ -21,11 +21,8 @@ output "secrets" {
   sensitive = true
 }
 
-#FETCH LOGIN CREDENTIALS FROM HCP VAULT
 provider "aws" {
   region     = "us-west-2"
-  access_key = data.hcp_vault_secrets_app.aws_credentials.secrets.access_key
-  secret_key = data.hcp_vault_secrets_app.aws_credentials.secrets.secret_key
 }
 
 #CREATE EC2 INSTANCE

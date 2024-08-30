@@ -55,7 +55,7 @@ resource "aws_s3_bucket" "my-terraform-state-gk" {
   bucket = "my-terraform-state-gk"
 
   lifecycle {
-    prement_destroy = true
+    prevent_destroy = true
   }
    
   tags = {

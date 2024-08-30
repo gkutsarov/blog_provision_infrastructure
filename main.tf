@@ -53,6 +53,10 @@ resource "aws_instance" "web" {
 #Create S3 Bucket
 resource "aws_s3_bucket" "my-terraform-state-gk" {
   bucket = "my-terraform-state-gk"
+
+  lifecycle {
+    prement_destroy = true
+  }
    
   tags = {
     Name = "TerraformStateBucket"

@@ -101,9 +101,14 @@ resource "aws_iam_policy" "terraform_state_policy" {
   })
 }
 
-#Attach IAM Policy to iamadmin user
+#Create IAM user to manage the S3 bucket
+resource "aws_iam_user" "user_to_manage_tf_state" {
+  name = "user_to_manage_tf_state"
+}
+
+#Attach IAM Policy to the above created user.
 
 resource "aws_iam_user_policy_attachment" "attach_policy_to_iamadmin" {
-  user = "iamadmin"
+  user = "user_to_manage_tf_state"
   policy_arn = aws_iam_policy.terraform_state_policy.arn
 }

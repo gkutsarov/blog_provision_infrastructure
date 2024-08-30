@@ -11,16 +11,6 @@ terraform {
   }
 }
 
-#LOGIN TO HCP Vault Cloud to fetch the AWS credentials
-data "hcp_vault_secrets_app" "aws_credentials" {
-  app_name = "aws-credentials"
-}
-
-output "secrets" {
-  value = data.hcp_vault_secrets_app.aws_credentials.secrets
-  sensitive = true
-}
-
 provider "aws" {
   region     = "us-west-2"
 }

@@ -48,7 +48,7 @@ resource "aws_security_group" "allow_ssh" {
 #CREATE SECURITY GROUP TO ALLOW OUTBOUND TRAFFIC
 resource "aws_security_group" "allow_outbound" {
   name        = "allow_outbound"
-  description = "Security group to allow_outbound"  
+  description = "Security group to allow outbound traffic"  
 
    egress {
     from_port   = 0

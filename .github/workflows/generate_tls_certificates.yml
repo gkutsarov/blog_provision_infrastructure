@@ -32,8 +32,9 @@ jobs:
     - name: Set Environment Variables
       id: set-env
       run: |
-        echo "PRIVATE_KEY=$(terraform output -raw private_key)" >> $GITHUB_ENV
-        echo "PUBLIC_KEY=$(terraform output -raw public_key)" >> $GITHUB_ENV
+        echo "PRIVATE_KEY=$(terraform output -raw private_key | tr -d '\n')" >> $GITHUB_ENV
+        echo "PUBLIC_KEY=$(terraform output -raw public_key | tr -d '\n')" >> $GITHUB_ENV
+
   
     - name: Store SSH Private Key in GitHub Secrets
       if: always()  # Run this step even if previous steps fail

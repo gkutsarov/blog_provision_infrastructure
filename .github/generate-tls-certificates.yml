@@ -1,0 +1,31 @@
+name: Generate TLS Certificates
+
+# Trigger this workflow manually from the Actions tab
+on:
+  workflow_dispatch:
+
+jobs:
+  terraform:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v2
+
+    - name: Set up Terraform
+      uses: hashicorp/setup-terraform@v1
+      with:
+        terraform_version: 1.3.5
+
+    - name: Initialize Terraform
+      run: terraform init
+
+    - name: Apply Terraform - Generate TLS Certificates
+      run: terraform apply -auto-approve -target=tls_private_key.ssh_key
+
+    - name: Store SSH Private Key in GitHub Secrets (Optional)
+      uses: okteto/action-github-secret@v1.0.3
+      with:
+        name: SSH_PRIVATE_KEY
+        value: ${{ steps.terraform.outputs.private_key }}
+        token: ${{ secrets.GITHUB_TOKEN }}

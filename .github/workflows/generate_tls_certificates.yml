@@ -30,9 +30,9 @@ jobs:
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
     - name: Output Private Key
+      id: output
       run: |
         echo "Private Key:"
-        echo "${{ steps.apply.outputs.private_key }}"
-      env:
-        PRIVATE_KEY: ${{ steps.apply.outputs.private_key }}
+        terraform output -raw private_key > private_key.pem
+        cat private_key.pem
     

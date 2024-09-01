@@ -28,3 +28,18 @@ jobs:
       env:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+    
+    - name: Get Private Key
+      id: get_key
+      run: |
+        echo "PRIVATE_KEY=$(terraform output -raw private_key)" >> $GITHUB_ENV
+        echo "PUBLIC_KEY=$(terraform output -raw public_key)" >> $GITHUB_ENV
+  
+    - name: Store SSH Private Key in GitHub Secrets
+      if: always()  # Run this step even if previous steps fail
+      run: |
+        curl -X PUT \
+          -H "Accept: application/vnd.github+json" \
+          -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+          -d '{"encrypted_value":"'"$(echo -n "${{ env.PRIVATE_KEY }}" | base64 -w 0)"'"}' \
+          https://api.github.com/repos/${{ github.repository }}/actions/secrets/SSH_PRIVATE_KEY

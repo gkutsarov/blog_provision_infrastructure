@@ -7,7 +7,7 @@ resource "tls_private_key" "ssh_key" {
 #OUTPUT PRIVATE AND PUBLIC KEYS
 output "private_key" {
   value     = tls_private_key.ssh_key.private_key_pem
-  #sensitive = true
+  sensitive = true
 }
 
 output "public_key" {

@@ -38,20 +38,24 @@ resource "aws_security_group" "allow_ssh" {
   description = "Security group for SSH access"
 
   ingress {
-    description = "Allow SSH"
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
     cidr_blocks = ["77.70.78.206/32"]
   }
+}
+  
+#CREATE SECURITY GROUP TO ALLOW OUTBOUND TRAFFIC
+resource "aws_security_group" "allow_outbound" {
+  name        = "allow_outbound"
+  description = "Security group to allow_outbound"  
 
-  egress {
+   egress {
     from_port   = 0
     to_port     = 0
     protocol    = "-1" #Allow all outbound traffic
     cidr_blocks = ["0.0.0.0/0"]
   }
-
 }
 
 #CREATE EC2 INSTANCE
@@ -59,7 +63,7 @@ resource "aws_instance" "web" {
   ami                    = data.aws_ami.ubuntu.id
   instance_type          = "t2.micro"
   key_name               = aws_key_pair.ssh_key.key_name
-  vpc_security_group_ids = [aws_security_group.allow_ssh.id]
+  vpc_security_group_ids = [aws_security_group.allow_ssh.id, aws_security_group.allow_outbound.id]
 }
 
 #S3 Bucket for Terraform Configuration

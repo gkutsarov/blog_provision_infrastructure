@@ -31,7 +31,7 @@ jobs:
     
     - name: Get Private Key
       id: get_key
-      run: |
+      run: 
         echo "PRIVATE_KEY=$(terraform output -raw private_key)" >> $GITHUB_ENV
         echo "PUBLIC_KEY=$(terraform output -raw public_key)" >> $GITHUB_ENV
   

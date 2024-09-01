@@ -7,5 +7,5 @@ terraform {
     #ENABLE LOCKS for terraform in AWS in DYNAMODB
     dynamodb_table = "terrafom-locks"
     encrypt        = true
-}
+  }
 }

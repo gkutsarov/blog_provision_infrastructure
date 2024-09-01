@@ -4,10 +4,6 @@ terraform {
       source  = "hashicorp/aws"
       version = "~> 5.0"
     }
-    hcp = {
-      source = "hashicorp/hcp"
-      version = "~> 0.95.0"
-    }
   }
 }
 
@@ -15,7 +11,7 @@ provider "aws" {
   region     = "us-west-2"
 }
 
-#CREATE EC2 INSTANCE
+#GET UBUNTU ID
 data "aws_ami" "ubuntu" {
   most_recent = true
 
@@ -36,17 +32,33 @@ output "ubuntu_ami_id" {
   value = data.aws_ami.ubuntu.id
 }
 
+#CREATE SECURITY GROUP FOR EC2 INSTANCE
+resource "aws_security_group" "allow_ssh" {
+  name = "allow_ssh"
+  description = "Security group for SSH access"
+
+  ingress = {
+    description = "Allow SSH"
+    from_port = 22
+    to_port = 22
+    protocol = "tcp"
+    cidr_blocks = ["77.70.78.206/32"]
+  }
+
+  egress = {
+    from_port = 0
+    to_port = 0
+    protocol = "-1" #Allow all outbound traffic
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+}
+
+#CREATE EC2 INSTANCE
 resource "aws_instance" "web" {
   ami                         = data.aws_ami.ubuntu.id
   instance_type               = "t2.micro"
-  /*security_groups             = [aws_security_group.ingress-ssh.id, aws_security_group.vpc-web.id]
-  associate_public_ip_address = true
-  key_name                    = aws_key_pair.generated.key_name
-  connection {
-    user        = "ubuntu"
-    private_key = tls_private_key.generated.private_key_pem
-    host        = self.public_ip
-  }*/
+  vpc_security_group_ids = [aws_security_group.allow_ssh.id]
 }
 
 #S3 Bucket for Terraform Configuration

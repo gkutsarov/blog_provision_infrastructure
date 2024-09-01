@@ -22,10 +22,3 @@ jobs:
 
     - name: Apply Terraform - Generate TLS Certificates
       run: terraform apply -auto-approve -target=tls_private_key.ssh_key
-
-    - name: Store SSH Private Key in GitHub Secrets (Optional)
-      uses: okteto/action-github-secret@v1.0.3
-      with:
-        name: SSH_PRIVATE_KEY
-        value: ${{ steps.terraform.outputs.private_key }}
-        token: ${{ secrets.GITHUB_TOKEN }}

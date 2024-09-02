@@ -7,6 +7,10 @@ on:
         description: "Enter the EC2 instance IP address"
         required: true
         default: ""
+      security_group_id:
+        description: "Enter the Security Group ID to update"
+        required: true
+        default: ""
 
 jobs:
   deploy:
@@ -26,6 +30,25 @@ jobs:
 
     - name: Set Permissions on Private Key
       run: chmod 600 /tmp/private_key.pem
+
+    - name: Get GitHub Runner IP
+      id: get_ip
+      run: |
+        IP=$(curl -s https://api.ipify.org/)
+        echo "RUNNER_IP=$IP" >> $GITHUB_ENV
+      shell: bash
+
+    - name: Update Security Group with Runner IP
+      run: |
+        aws ec2 authorize-security-group-ingress \
+          --group-id ${{ github.event.inputs.security_group_id }} \
+          --protocol tcp \
+          --port 22 \
+          --cidr ${{ env.RUNNER_IP }}/32
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        AWS_REGION: us-west-2
 
     - name: Create Ansible Inventory
       run: |

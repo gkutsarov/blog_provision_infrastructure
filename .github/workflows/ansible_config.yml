@@ -25,11 +25,11 @@ jobs:
       shell: bash
 
     - name: Debug SSH Private Key
-      run: echo "${{ secrets.TLS_CERTIFICATE }}"
+      run: 'echo "${{ secrets.TLS_CERTIFICATE }}"'
       shell: bash
 
     - name: Write SSH Private Key to File
-      run: echo "${{ secrets.TLS_CERTIFICATE }}" | tr -d '\r' > /tmp/private_key.pem
+      run: 'echo "${{ secrets.TLS_CERTIFICATE }}" | ''tr -d ''\r'' > /tmp/private_key.pem'
       shell: bash
 
     - name: Set Permissions on Private Key

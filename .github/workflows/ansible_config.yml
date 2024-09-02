@@ -50,6 +50,10 @@ jobs:
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         AWS_REGION: us-west-2
 
+    - name: Ensure .ssh Directory Exists
+      run: mkdir -p ~/.ssh
+      shell: bash
+
     - name: Add EC2 Host Key to Known Hosts
       run: |
         ssh-keyscan -H ${{ github.event.inputs.ec2_ip_address }} >> ~/.ssh/known_hosts

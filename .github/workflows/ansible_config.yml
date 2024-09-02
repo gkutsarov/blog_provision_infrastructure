@@ -1,0 +1,39 @@
+name: Ansible Deployment
+
+on:
+  workflow_dispatch:
+    inputs:
+      ec2_ip_address:
+        description: "Enter the EC2 instance IP address"
+        required: true
+        default: ""
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v2
+
+    - name: Install Ansible
+      run: sudo apt-get update && sudo apt-get install -y ansible
+      shell: bash
+
+    - name: Write SSH Private Key to File
+      run: echo "${{ secrets.EC2_PRIVATE_KEY }}" > /tmp/private_key.pem
+      shell: bash
+
+    - name: Set Permissions on Private Key
+      run: chmod 600 /tmp/private_key.pem
+
+    - name: Create Ansible Inventory
+      run: |
+        echo "[web_servers]" > ansible/inventory
+        echo "${{ github.event.inputs.ec2_ip_address }} ansible_ssh_private_key_file=/tmp/private_key.pem ansible_user=ubuntu" >> ansible/inventory
+      shell: bash
+
+    - name: Run Ansible Playbook
+      run: ansible-playbook -i ansible/inventory ansible/playbook.yml
+      env:
+        ANSIBLE_CONFIG: ansible/ansible.cfg

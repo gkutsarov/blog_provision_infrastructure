@@ -24,19 +24,19 @@ jobs:
       run: sudo apt-get update && sudo apt-get install -y ansible
       shell: bash
 
-    - name: Debug SSH Private Key
-      run: 'echo "${{ secrets.TLS_CERTIFICATE }}"'
-      shell: bash
+    # - name: Debug SSH Private Key
+    #   run: echo "${{ secrets.TLS_CERTIFICATE }}"
+    #   shell: bash
 
     - name: Write SSH Private Key to File
-      run: 'echo "${{ secrets.TLS_CERTIFICATE }}" | ''tr -d ''\r'' > /tmp/private_key.pem'
+      run: echo "${{ secrets.TLS_CERTIFICATE }}" | 'tr -d '\r' > /tmp/private_key.pem
       shell: bash
 
     - name: Set Permissions on Private Key
       run: chmod 600 /tmp/private_key.pem
 
-    - name: Verify Private Key Content
-      run: cat /tmp/private_key.pem
+    - name: Verify Private Key File Exists
+      run: ls -l /tmp/private_key.pem && cat /tmp/private_key.pem | head -n 5
       shell: bash
 
     - name: Get GitHub Runner IP

@@ -29,14 +29,14 @@ jobs:
     #   shell: bash
 
     - name: Write SSH Private Key to File
-      run: echo "${{ secrets.TLS_CERTIFICATE }}" | 'tr -d '\r' > /tmp/private_key.pem
+      run: echo "${{ secrets.TLS_CERTIFICATE }}" | tr -d '\r' > /tmp/private_key.pem
       shell: bash
 
     - name: Set Permissions on Private Key
       run: chmod 600 /tmp/private_key.pem
 
     - name: Verify Private Key File Exists
-      run: ls -l /tmp/private_key.pem && cat /tmp/private_key.pem | head -n 5
+      run: cat /tmp/private_key.pem | head -n 5
       shell: bash
 
     - name: Get GitHub Runner IP

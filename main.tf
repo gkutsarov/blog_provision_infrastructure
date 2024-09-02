@@ -53,7 +53,7 @@ resource "aws_security_group" "allow_ssh" {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    cidr_blocks = [data.http.ip_address]
+    cidr_blocks = [format("%s/32", data.http.ip_address.body)]
   }
 }
   

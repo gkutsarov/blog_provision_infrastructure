@@ -4,11 +4,23 @@ terraform {
       source  = "hashicorp/aws"
       version = "~> 5.0"
     }
+    http = {
+      source = "hashicorp/http"
+      version = "3.4.4"
+    }
   }
 }
 
 provider "aws" {
   region = "us-west-2"
+}
+#GET THE GITHUB ACTION RUNNER IP ADDRESS
+data "http" "ip_address" {
+  url = "https://api.ipify.org/"
+}
+
+output "runner_ip_address" {
+  value = data.http.ip_address
 }
 
 #GET UBUNTU ID
@@ -41,7 +53,7 @@ resource "aws_security_group" "allow_ssh" {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    cidr_blocks = ["77.70.78.206/32"]
+    cidr_blocks = [data.http.ip_address]
   }
 }
   

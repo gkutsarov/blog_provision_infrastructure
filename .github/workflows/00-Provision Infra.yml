@@ -1,4 +1,4 @@
-name: Provision Infrastructure
+name: 00-Provision Infra
 
 on:
   workflow_dispatch:

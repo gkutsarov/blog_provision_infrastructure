@@ -1,4 +1,4 @@
-name: Ansible Deployment
+name: 01-Ansible Config
 
 on:
   workflow_dispatch:

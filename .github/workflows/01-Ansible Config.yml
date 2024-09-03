@@ -74,6 +74,6 @@ jobs:
       shell: bash
 
     - name: Run Ansible Playbook
-      run: ansible-playbook -i ansible/inventory ansible/playbook.yml
+      run: ansible-playbook -i ansible/inventory ansible/playbook.yml -vvv
       env:
         ANSIBLE_CONFIG: ansible/ansible.cfg

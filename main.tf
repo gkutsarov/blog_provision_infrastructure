@@ -4,23 +4,34 @@ terraform {
       source  = "hashicorp/aws"
       version = "~> 5.0"
     }
-    http = {
-      source = "hashicorp/http"
-      version = "3.4.4"
-    }
   }
 }
 
 provider "aws" {
   region = "us-west-2"
 }
-#GET THE GITHUB ACTION RUNNER IP ADDRESS
-data "http" "ip_address" {
-  url = "https://api.ipify.org/"
+
+#GENERATE SSH KEY PAIR
+resource "tls_private_key" "ssh_key" {
+  algorithm = "RSA"
+  rsa_bits  = 4096
 }
 
-output "runner_ip_address" {
-  value = data.http.ip_address
+#OUTPUT PRIVATE KEY
+output "private_key" {
+  value     = tls_private_key.ssh_key.private_key_pem
+  sensitive = true
+}
+
+#OTPUT PUBLIC KEY
+output "public_key" {
+  value = tls_private_key.ssh_key.public_key_openssh
+}
+
+#IMPORT THE PUBLIC KEY TO AWS
+resource "aws_key_pair" "ssh_key" {
+  key_name   = "web-server-key"
+  public_key = tls_private_key.ssh_key.public_key_openssh
 }
 
 #GET UBUNTU ID
@@ -40,21 +51,10 @@ data "aws_ami" "ubuntu" {
   owners = ["099720109477"] # Canonical's AWS account ID
 }
 
-output "ubuntu_ami_id" {
-  value = data.aws_ami.ubuntu.id
-}
-
 #CREATE SECURITY GROUP FOR EC2 INSTANCE
 resource "aws_security_group" "allow_ssh" {
   name        = "allow_ssh"
   description = "Security group for SSH access"
-
-  ingress {
-    from_port   = 22
-    to_port     = 22
-    protocol    = "tcp"
-    cidr_blocks = [format("%s/32", data.http.ip_address.body)]
-  }
 }
   
 #CREATE SECURITY GROUP TO ALLOW OUTBOUND TRAFFIC
@@ -79,7 +79,6 @@ resource "aws_instance" "web" {
 }
 
 #S3 Bucket for Terraform Configuration
-#Create S3 Bucket
 resource "aws_s3_bucket" "my-terraform-state-gk" {
   bucket = "my-terraform-state-gk"
 
@@ -88,6 +87,7 @@ resource "aws_s3_bucket" "my-terraform-state-gk" {
   }
 }
 
+#Enable bucket versioning
 resource "aws_s3_bucket_versioning" "my-terraform-state-gk" {
   bucket = aws_s3_bucket.my-terraform-state-gk.bucket
 
@@ -95,6 +95,7 @@ resource "aws_s3_bucket_versioning" "my-terraform-state-gk" {
     status = "Enabled"
   }
 }
+
 #Block Public Access to the bucket
 resource "aws_s3_bucket_public_access_block" "public_access" {
   bucket = aws_s3_bucket.my-terraform-state-gk.id
@@ -136,7 +137,6 @@ resource "aws_iam_user" "user_to_manage_tf_state" {
 }
 
 #Attach IAM Policy to the above created user.
-
 resource "aws_iam_user_policy_attachment" "attach_policy_to_iamadmin" {
   user       = "user_to_manage_tf_state"
   policy_arn = aws_iam_policy.terraform_state_policy.arn

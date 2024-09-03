@@ -1,4 +1,4 @@
-name: 99- Destroy Infra
+name: 99-Destroy Infra
 
 on:
   workflow_dispatch:  # Manually triggered via GitHub UI

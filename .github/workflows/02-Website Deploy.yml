@@ -25,7 +25,11 @@ jobs:
       shell: bash
 
     - name: Set Permissions on Private Key
-      run: chmod 600 /tmp/private_key.pem  
+      run: chmod 600 /tmp/private_key.pem
+
+    - name: Verify Private Key File Exists
+      run: cat /tmp/private_key.pem | head -n 5
+      shell: bash
 
     - name: Get GitHub Runner IP
       id: get_ip
@@ -45,6 +49,15 @@ jobs:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         AWS_REGION: us-west-2
+
+    - name: Ensure .ssh Directory Exists
+      run: mkdir -p ~/.ssh
+      shell: bash
+
+    - name: Add EC2 Host Key to Known Hosts
+      run: |
+        ssh-keyscan -H ${{ github.event.inputs.ec2_ip_address }} >> ~/.ssh/known_hosts
+      shell: bash
 
     - name: Upload files via SSH
       uses: appleboy/scp-action@v0.1.0

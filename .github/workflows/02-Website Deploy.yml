@@ -20,6 +20,13 @@ jobs:
     - name: Checkout Code
       uses: actions/checkout@v2
 
+    - name: Write SSH Private Key to File
+      run: echo "${{ secrets.TLS_CERTIFICATE_PRIVATE }}" | tr -d '\r' > /tmp/private_key.pem
+      shell: bash
+
+    - name: Set Permissions on Private Key
+      run: chmod 600 /tmp/private_key.pem  
+
     - name: Get GitHub Runner IP
       id: get_ip
       run: |

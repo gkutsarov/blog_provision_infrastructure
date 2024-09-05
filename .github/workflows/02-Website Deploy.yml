@@ -1,0 +1,49 @@
+name: 02-Website Deploy
+
+on:
+  workflow_dispatch:
+    inputs:
+      ec2_ip_address:
+        description: "Enter the EC2 instance IP address"
+        required: true
+        default: ""
+      security_group_id:
+        description: "Enter the Security Group ID to update"
+        required: true
+        default: ""
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v2
+
+    - name: Get GitHub Runner IP
+      id: get_ip
+      run: |
+        IP=$(curl -s https://api.ipify.org/)
+        echo "RUNNER_IP=$IP" >> $GITHUB_ENV
+      shell: bash
+
+    - name: Update Security Group with Runner IP
+      run: |
+        aws ec2 authorize-security-group-ingress \
+          --group-id ${{ github.event.inputs.security_group_id }} \
+          --protocol tcp \
+          --port 22 \
+          --cidr ${{ env.RUNNER_IP }}/32
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        AWS_REGION: us-west-2
+
+    - name: Upload files via SSH
+      uses: appleboy/scp-action@v0.1.0
+      with:
+        host: ${{ secrets.SERVER_IP }}         # Your server IP or domain stored in GitHub Secrets
+        username: ubuntu # SSH username stored in GitHub Secrets
+        key: ${{ secrets.TLS_CERTIFICATE }}   # SSH private key stored in GitHub Secrets
+        source: "."                           # Upload everything from the current directory (root of the repo)
+        target: "/var/www/gkutsarov/"

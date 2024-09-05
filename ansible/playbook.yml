@@ -21,3 +21,47 @@
         name: apache2
         state: started
         enabled: yes
+
+    - name: Configure Apache2 to serve custom website
+      hosts: web_servers
+      become: yes
+      tasks:
+        - name: Ensure /var/www/gkutsarov directory exists
+          file:
+            path: /var/www/gkutsarov
+            state: directory
+            owner: www-data
+            group: www-data
+            mode: '0755'
+    
+    - name: Create the Apache virtual host configuration file for gkutsarov.conf
+      copy:
+        dest: /etc/apache2/sites-available/gkutsarov.conf
+        content: |
+          <VirtualHost *:80>
+              ServerAdmin webmaster@gkutsarov.com
+              DocumentRoot /var/www/gkutsarov
+
+              <Directory /var/www/gkutsarov>
+                  Options Indexes FollowSymLinks
+                  AllowOverride None
+                  Require all granted
+              </Directory>
+
+              ErrorLog ${APACHE_LOG_DIR}/gkutsarov_error.log
+              CustomLog ${APACHE_LOG_DIR}/gkutsarov_access.log combined
+          </VirtualHost> 
+
+    - name: Disable default Apache site (000-default.conf)
+      command: a2dissite 000-default.conf
+      notify:
+        - Restart Apache
+
+  handlers:
+    - name: Restart Apache
+      service:
+        name: apache2
+        state: restarted
+  
+
+    

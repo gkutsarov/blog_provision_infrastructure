@@ -39,6 +39,11 @@ jobs:
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         AWS_REGION: us-west-2
 
+    - name: Add EC2 Host Key to Known Hosts
+      run: |
+        ssh-keyscan -H ${{ github.event.inputs.ec2_ip_address }} >> ~/.ssh/known_hosts
+        shell: bash
+
     - name: Upload files via SSH
       uses: appleboy/scp-action@v0.1.0
       with:

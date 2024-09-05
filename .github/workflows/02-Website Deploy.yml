@@ -44,6 +44,6 @@ jobs:
       with:
         host: ${{ secrets.SERVER_IP }}         # Your server IP or domain stored in GitHub Secrets
         username: ubuntu # SSH username stored in GitHub Secrets
-        key: ${{ secrets.TLS_CERTIFICATE }}   # SSH private key stored in GitHub Secrets
+        key: ${{ secrets.TLS_CERTIFICATE_PRIVATE }}   # SSH private key stored in GitHub Secrets
         source: "."                           # Upload everything from the current directory (root of the repo)
         target: "/var/www/gkutsarov/"

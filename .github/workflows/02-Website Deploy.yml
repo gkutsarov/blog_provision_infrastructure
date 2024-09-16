@@ -74,7 +74,7 @@ jobs:
     - name: Upload files via SSH
       uses: appleboy/scp-action@v0.1.0
       with:
-        host: ${{ github.event.inputs.ec2_ip_address }}
+        host: ${{ secrets.SERVER_IP }}
         username: ubuntu
         key: ${{ secrets.TLS_CERTIFICATE_PRIVATE }}
         source: "./website"

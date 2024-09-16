@@ -66,6 +66,7 @@ jobs:
           sudo mkdir -p /var/www/gkutsarov/
           sudo chown ubuntu:www-data /var/www/gkutsarov/
           sudo chmod 775 /var/www/gkutsarov/
+          sudo ls /var/www
         EOF
       shell: bash
 
@@ -75,7 +76,7 @@ jobs:
       with:
         host: ${{ github.event.inputs.ec2_ip_address }}
         username: ubuntu
-        key: /tmp/private_key.pem
+        key: ${{ secrets.TLS_CERTIFICATE_PRIVATE }}
         source: "./website"
         target: "/var/www/gkutsarov/"
         port: 22

@@ -71,15 +71,8 @@ jobs:
       shell: bash
 
     ### SCP the Files to the Remote Server ###
-    - name: Upload files via SSH
-      uses: appleboy/scp-action@v0.1.0
-      with:
-        host: ${{ secrets.SERVER_IP }}
-        username: ubuntu
-        key: ${{ secrets.TLS_CERTIFICATE_PRIVATE }}
-        source: "./website"
-        target: "/var/www/gkutsarov/"
-        port: 22
+    - name: SCP the files to the Remote Server
+      run: scp -i /tmp/private_key.pem -r ./website ubuntu@${{ github.event.inputs.ec2_ip_address }}:/var/www/gkutsarov/
 
     ### New Step: Restore directory ownership and permissions ###
     - name: Restore directory ownership for Apache

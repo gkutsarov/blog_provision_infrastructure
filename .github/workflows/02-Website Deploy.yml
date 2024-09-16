@@ -59,11 +59,26 @@ jobs:
         ssh-keyscan -H ${{ github.event.inputs.ec2_ip_address }} >> ~/.ssh/known_hosts
       shell: bash
 
-    - name: Upload files via SSH
-      uses: appleboy/scp-action@v0.1.3
+    - name: Upload files to temporary directory
+      uses: appleboy/scp-action@v0.1.0
       with:
-        host: ${{ secrets.SERVER_IP }}         # Your server IP or domain stored in GitHub Secrets
-        username: ubuntu # SSH username stored in GitHub Secrets
-        key: ${{ secrets.TLS_CERTIFICATE_PRIVATE }}   # SSH private key stored in GitHub Secrets
-        source: "./website"                           # Upload everything from the current directory (root of the repo)
-        target: "/var/www/gkutsarov/"
+        host: ${{ secrets.SERVER_IP }}
+        username: ubuntu
+        key: ${{ secrets.TLS_CERTIFICATE_PRIVATE }}
+        source: "./website"
+        target: "/home/ubuntu/tmp_website"  # Upload to a temporary directory
+    
+    - name: Move files to the final directory with sudo
+      run: |
+        sudo mv /home/ubuntu/tmp_website /var/www/gkutsarov/
+        sudo chown -R www-data:www-data /var/www/gkutsarov/  # Restore ownership to web server user
+      shell: bash
+
+    # - name: Upload files via SSH
+    #   uses: appleboy/scp-action@v0.1.3
+    #   with:
+    #     host: ${{ secrets.SERVER_IP }}         # Your server IP or domain stored in GitHub Secrets
+    #     username: ubuntu # SSH username stored in GitHub Secrets
+    #     key: ${{ secrets.TLS_CERTIFICATE_PRIVATE }}   # SSH private key stored in GitHub Secrets
+    #     source: "./website"                           # Upload everything from the current directory (root of the repo)
+    #     target: "/var/www/gkutsarov/"

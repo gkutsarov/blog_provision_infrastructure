@@ -22,17 +22,13 @@
         state: started
         enabled: yes
 
-    - name: Configure Apache2 to serve custom website
-      hosts: web_servers
-      become: yes
-      tasks:
-        - name: Ensure /var/www/gkutsarov directory exists
-          file:
-            path: /var/www/gkutsarov
-            state: directory
-            owner: www-data
-            group: www-data
-            mode: '0755'
+    - name: Ensure /var/www/gkutsarov directory exists
+      file:
+        path: /var/www/gkutsarov
+        state: directory
+        owner: www-data
+        group: www-data
+        mode: '0755'
     
     - name: Create the Apache virtual host configuration file for gkutsarov.conf
       copy:

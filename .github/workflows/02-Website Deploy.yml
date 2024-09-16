@@ -59,12 +59,42 @@ jobs:
         ssh-keyscan -H ${{ github.event.inputs.ec2_ip_address }} >> ~/.ssh/known_hosts
       shell: bash
 
+    # ### New Step: Adjust directory permissions temporarily ###
+    # - name: Temporarily adjust directory permissions for deployment
+    #   run: |
+    #     ssh -i /tmp/private_key.pem ubuntu@${{ github.event.inputs.ec2_ip_address }} << 'EOF'
+    #       sudo mkdir -p /var/www/gkutsarov/
+    #       sudo chown ubuntu:www-data /var/www/gkutsarov/
+    #       sudo chmod 775 /var/www/gkutsarov/
+    #     EOF
+    #   shell: bash
+
+    # ### SCP the Files to the Remote Server ###
+    # - name: Upload files via SSH
+    #   uses: appleboy/scp-action@v0.1.0
+    #   with:
+    #     host: ${{ github.event.inputs.ec2_ip_address }}
+    #     username: ubuntu
+    #     key: /tmp/private_key.pem
+    #     source: "./website"
+    #     target: "/var/www/gkutsarov/"
+    #     port: 22
+
+    # ### New Step: Restore directory ownership and permissions ###
+    # - name: Restore directory ownership for Apache
+    #   run: |
+    #     ssh -i /tmp/private_key.pem ubuntu@${{ github.event.inputs.ec2_ip_address }} << 'EOF'
+    #       sudo chown -R www-data:www-data /var/www/gkutsarov/
+    #       sudo chmod 755 /var/www/gkutsarov/
+    #     EOF
+    #   shell: bash
+
     - name: Upload files via SSH
       uses: appleboy/scp-action@v0.1.3
       with:
         host: ${{ secrets.SERVER_IP }}         # Your server IP or domain stored in GitHub Secrets
         username: ubuntu # SSH username stored in GitHub Secrets
-        key: ${{ secrets.TLS_CERTIFICATE_PRIVATE }}   # SSH private key stored in GitHub Secrets
+        key: /tmp/private_key.pem  # SSH private key stored in GitHub Secrets
         source: "./website"                           # Upload everything from the current directory (root of the repo)
         target: "/var/www/gkutsarov/"
         debug: true

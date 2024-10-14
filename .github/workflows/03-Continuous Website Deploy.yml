@@ -56,8 +56,8 @@ jobs:
     - name: Temporarily adjust directory permissions for deployment
       run: |
         ssh -i /tmp/private_key.pem ubuntu@${{ secrets.EC2_IP_ADDRESS }} << 'EOF'
-          sudo chown ubuntu:www-data /var/www/gkutsarov/
-          sudo chmod 775 /var/www/gkutsarov/
+          sudo chown -R ubuntu:www-data /var/www/gkutsarov/
+          sudo chmod -R 775 /var/www/gkutsarov/
         EOF
       shell: bash
 
@@ -70,6 +70,6 @@ jobs:
       run: |
         ssh -i /tmp/private_key.pem ubuntu@${{ secrets.EC2_IP_ADDRESS }} << 'EOF'
           sudo chown -R www-data:www-data /var/www/gkutsarov/
-          sudo chmod 755 /var/www/gkutsarov/
+          sudo chmod -R 755 /var/www/gkutsarov/
         EOF
       shell: bash

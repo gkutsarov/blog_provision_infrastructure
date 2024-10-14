@@ -62,7 +62,7 @@ resource "aws_security_group" "allow_http_https" {
   name        = "allow_http_https"
   description = "Security group for HTTP and HTTPS access"
 
-  ingress = {
+  ingress {
     description = "Allow HTTP traffic"
     from_port   = 80
     to_port     = 80

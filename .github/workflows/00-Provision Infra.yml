@@ -38,6 +38,7 @@ jobs:
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
     - name: Output Private Key
+      working-directory: ./infrastructure
       id: output
       run: terraform output -raw private_key
       env:

@@ -36,9 +36,9 @@
         content: |
           <VirtualHost *:80>
               ServerAdmin webmaster@gkutsarov.com
-              DocumentRoot /var/www/gkutsarov
+              DocumentRoot /var/www/gkutsarov/website
 
-              <Directory /var/www/gkutsarov>
+              <Directory /var/www/gkutsarov/website>
                   Options Indexes FollowSymLinks
                   AllowOverride None
                   Require all granted
@@ -50,6 +50,11 @@
 
     - name: Disable default Apache site (000-default.conf)
       command: a2dissite 000-default.conf
+      notify:
+        - Restart Apache
+
+    - name: Enable new(my website) website.
+      command: a2ensite gkutsarov.conf
       notify:
         - Restart Apache
 

@@ -1,9 +1,6 @@
 name: 02-Website Deploy
 
 on:
-  push:
-    paths:
-      - 'website/**' # Only trigger when changes are made to files in website directory
   workflow_dispatch:
     inputs:
       ec2_ip_address:

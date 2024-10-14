@@ -1,0 +1,77 @@
+name: 03-Continuous Website Deploy
+
+on:
+  push:
+    paths:
+      - 'website/**' # Trigger when changes are made to files in the website directory
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v2
+
+    - name: Write SSH Private Key to File
+      run: echo "${{ secrets.TLS_CERTIFICATE_PRIVATE }}" | tr -d '\r' > /tmp/private_key.pem
+      shell: bash
+
+    - name: Set Permissions on Private Key
+      run: chmod 600 /tmp/private_key.pem
+
+    - name: Verify Private Key File Exists
+      run: cat /tmp/private_key.pem | head -n 5
+      shell: bash
+
+    - name: Get GitHub Runner IP
+      id: get_ip
+      run: |
+        IP=$(curl -s https://api.ipify.org/)
+        echo "RUNNER_IP=$IP" >> $GITHUB_ENV
+      shell: bash
+
+    - name: Update Security Group with Runner IP
+      run: |
+        aws ec2 authorize-security-group-ingress \
+          --group-id ${{ secrets.SECURITY_GROUP_ID }} \
+          --protocol tcp \
+          --port 22 \
+          --cidr ${{ env.RUNNER_IP }}/32
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        AWS_REGION: us-west-2
+
+    - name: Ensure .ssh Directory Exists
+      run: mkdir -p ~/.ssh
+      shell: bash
+
+    - name: Add EC2 Host Key to Known Hosts
+      run: |
+        ssh-keyscan -H ${{ secrets.EC2_IP_ADDRESS }} >> ~/.ssh/known_hosts
+      shell: bash
+
+    # ### Adjust directory permissions temporarily ###
+    # - name: Temporarily adjust directory permissions for deployment
+    #   run: |
+    #     ssh -i /tmp/private_key.pem ubuntu@${{ secrets.EC2_IP_ADDRESS }} << 'EOF'
+    #       sudo mkdir -p /var/www/gkutsarov/
+    #       sudo chown ubuntu:www-data /var/www/gkutsarov/
+    #       sudo chmod 775 /var/www/gkutsarov/
+    #       sudo ls /var/www
+    #     EOF
+    #   shell: bash
+
+    ### SCP the Files to the Remote Server ###
+    - name: SCP the files to the Remote Server
+      run: scp -i /tmp/private_key.pem -r ./website ubuntu@${{ secrets.EC2_IP_ADDRESS }}:/var/www/gkutsarov/
+
+    # ### Restore directory ownership and permissions ###
+    # - name: Restore directory ownership for Apache
+    #   run: |
+    #     ssh -i /tmp/private_key.pem ubuntu@${{ secrets.EC2_IP_ADDRESS }} << 'EOF'
+    #       sudo chown -R www-data:www-data /var/www/gkutsarov/
+    #       sudo chmod 755 /var/www/gkutsarov/
+    #     EOF
+    #   shell: bash

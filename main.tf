@@ -23,7 +23,7 @@ output "private_key" {
   sensitive = true
 }
 
-#OTPUT PUBLIC KEY
+#OUTPUT PUBLIC KEY
 output "public_key" {
   value = tls_private_key.ssh_key.public_key_openssh
 }
@@ -51,18 +51,41 @@ data "aws_ami" "ubuntu" {
   owners = ["099720109477"] # Canonical's AWS account ID
 }
 
-#CREATE SECURITY GROUP FOR EC2 INSTANCE
+#CREATE SECURITY GROUP FOR SSH TRAFFIC TO THE EC2 INSTANCE
 resource "aws_security_group" "allow_ssh" {
   name        = "allow_ssh"
   description = "Security group for SSH access"
 }
-  
+
+#CREATE SECURITY GROUP FOR HTTP AND HTTPS TRAFFIC
+resource "aws_security_group" "allow_http_https" {
+  name        = "allow_http_https"
+  description = "Security group for HTTP and HTTPS access"
+
+  ingress = {
+    description = "Allow HTTP traffic"
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"] # Allows traffic from any IP
+  }
+
+  ingress {
+    description = "Allow HTTPS traffic"
+    from_port   = 443
+    to_port     = 443
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"] # Allows traffic from any IP
+  }
+
+}
+
 #CREATE SECURITY GROUP TO ALLOW OUTBOUND TRAFFIC
 resource "aws_security_group" "allow_outbound" {
   name        = "allow_outbound"
-  description = "Security group to allow outbound traffic"  
+  description = "Security group to allow outbound traffic"
 
-   egress {
+  egress {
     from_port   = 0
     to_port     = 0
     protocol    = "-1" #Allow all outbound traffic

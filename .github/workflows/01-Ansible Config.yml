@@ -24,10 +24,6 @@ jobs:
       run: sudo apt-get update && sudo apt-get install -y ansible
       shell: bash
 
-    # - name: Debug SSH Private Key
-    #   run: echo "${{ secrets.TLS_CERTIFICATE_PRIVATE }}"
-    #   shell: bash
-
     - name: Write SSH Private Key to File
       run: echo "${{ secrets.TLS_CERTIFICATE_PRIVATE }}" | tr -d '\r' > /tmp/private_key.pem
       shell: bash

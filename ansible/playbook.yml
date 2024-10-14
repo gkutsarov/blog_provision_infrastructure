@@ -53,7 +53,7 @@
       notify:
         - Restart Apache
 
-    - name: Enable new(my website) website.
+    - name: Enable new (my website) website.
       command: a2ensite gkutsarov.conf
       notify:
         - Restart Apache

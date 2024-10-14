@@ -56,10 +56,8 @@ jobs:
     - name: Temporarily adjust directory permissions for deployment
       run: |
         ssh -i /tmp/private_key.pem ubuntu@${{ secrets.EC2_IP_ADDRESS }} << 'EOF'
-          sudo mkdir -p /var/www/gkutsarov/
           sudo chown ubuntu:www-data /var/www/gkutsarov/
           sudo chmod 775 /var/www/gkutsarov/
-          sudo ls /var/www
         EOF
       shell: bash
 

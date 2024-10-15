@@ -49,6 +49,12 @@ When a change is made to any file in the **website** repo and then pushed to Git
 
 It copies the modified files and uploads them to the **var/www/gkutsarov** on the EC2 instance from where the website content is served.
 
+# [5] Destroy Infrastructure
+
+99-Destroy Infra.yml
+
+Used to destroy the whole infrastructure - EC2, SGs, S3 and etc.
+
 
 
 

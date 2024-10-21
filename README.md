@@ -2,6 +2,16 @@
 
 The following text is an explanation of how [gkutsarov.com](https://gkutsarov.com) is configured and hosted.
 
+# Note
+
+**Default VPC is sufficient** - AWS provides a default VPC in each region, which comes with subnets, an internet gateway, and security groups already configured. For a simple project like hosting a website on EC2 with Apache, the default VPC offers everything you need for public internet access and security without requiring custom configurations.
+
+**Cost Savings** - Creating a custom VPC can introduce additional services that incur costs, such as NAT gateways or VPC peering, which aren’t necessary for a small-scale project. By sticking with the default VPC, you avoid these extra costs and keep your infrastructure simple.
+
+**High Availability** - can be done by configuring Auto Scaling Groups to ensure availability even if traffic grows.
+
+**Load Balance** - Easily can be implemented by integrating Elastic Load Balancer (ELB) which distributes traffic across multiple EC2 instances.
+
 # [0] Overview
 
 The project uses GitHub Actions. Provision, Configure, changes to the website content is controlled by GitHub Actions.

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../styles.css">
+    <link rel="shortcut icon" href="imgs/">
+    <title>gkutsarov.com</title>
+</head>
+<body>
+    <div id="header" class="header"> <!--HEADER SECTION-->
+        <div class="logodiv"> <!--LOGODIV-->
+            <a href="../index.html">
+                <img class="logo" src="../imgs/logo.svg">
+            </a>
+        <div class="filter"> <!--FILTER-->
+            <a href="../index.html">HOME</a>
+            <!-- <span class="footdogs"> / </span>
+            <a href="index.html">ZINE</a>
+            <span class="footdogs"> / </span>
+            <a href="index.html">LIVE</a>
+            <span class="footdogs"> / </span> -->
+        </div> <!--END OF FILTER-->
+        </div> <!--END OF LOGODIV-->
+    </div> <!--END OF HEADER SECTION-->
+
+    <div id="content">
+        <div id="page">
+            <div id="list">
+                <div class="title">KUBERNETES <br></div> <!-- end of div title -->
+                <div id="post">
+                    <p>After Docker, comes Kubernetes or K8S. K8S is an open-source platform that automates the deployment, scalling and management of containerized applications.</p>
+                    <p>It's designed to handle clusters of containers at scale, making it especially useful for managing a large number of containers across multiple machines (nodes).</p>
+                    <p>No need to worry about compatibility issues and missing dependencies anymore.</p>
+
+                    <p class="subtitle">MAIN FEATURES of K8S</p>
+                        <ol>
+                            <li>Container Orchestration: K8S automates the deployment, scalling and operation of application containers across clusters.</li>
+                            <li>Load Balancing and Scaling: It can distribute network traffic across containers and scale applications up or down based on demand.</li>
+                            <li>Self-Healing: K8S can automatically restart, replace and reschedule containers if they fail or if nodes in the cluster go down.</li>
+                            <li>Resource Optimization: It maximizes resource utilization by packing containers onto nodes efficiently.</li>
+                        </ol>
+                    <p class="subtitle">THE PROJECT</p>
+                    <p>To demonstrate K8S capabilities I have expanded on my previous docker project <a href="https://gkutsarov.com/articles/docker.html">here</a> and adjusted the setup for K8S. It's the same PHP app and MySQL database.</p>
+                    <p>Here we make use of PV and PVC for persistent data. Configmaps for app customization and data initialization. Services for internal app communication.</p>
+                    <p>The final result is actually "live" and hosted on my EC2 instance. Obviously I use different user credentials than the ones listed in my github repo.</p>
+                    <p>At the moment the setup is made for local bare-metal K8S cluster. For future projects it will be expanded and deployed for AWS cloud environment.</p>
+                    <p>Project files and explanations are located in my github repo <a href="https://github.com/gkutsarov/k8s_php_mysql">here</a></p>
+                </div> <!-- end of div post-->
+            </div> <!-- end of div list-->
+        </div> <!-- END OF DIV PAGE-->
+    </div> <!-- END OF DIV CONTENT-->
+
+</body>
+</html>

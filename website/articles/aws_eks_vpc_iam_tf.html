@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-7CHX6R3Y79"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'G-7CHX6R3Y79');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../styles.css">
+    <link rel="shortcut icon" href="imgs/">
+    <title>gkutsarov.com</title>
+</head>
+<body>
+    <div id="header" class="header"> <!--HEADER SECTION-->
+        <div class="logodiv"> <!--LOGODIV-->
+            <a href="../index.html">
+                <img class="logo" src="../imgs/logo.svg">
+            </a>
+        <div class="filter"> <!--FILTER-->
+            <a href="../index.html">HOME</a>
+            <!-- <span class="footdogs"> / </span>
+            <a href="index.html">ZINE</a>
+            <span class="footdogs"> / </span>
+            <a href="index.html">LIVE</a>
+            <span class="footdogs"> / </span> -->
+        </div> <!--END OF FILTER-->
+        </div> <!--END OF LOGODIV-->
+    </div> <!--END OF HEADER SECTION-->
+
+    <div id="content">
+        <div id="page">
+            <div id="list">
+                <div class="title">AWS + EKS + VPC + IAM + Terraform<br></div> <!-- end of div title -->
+                <div id="post">
+                    <p>The following lines are explanation of a project I have been working on and still being developed by adding new infrastructure and features.</p>
+                    <p></p>
+                    <p class="subtitle">THE PROJECT</p>
+                    <p>To demonstrate K8S capabilities I have expanded on my previous docker project <a href="https://gkutsarov.com/articles/docker.html">here</a> and adjusted the setup for K8S. It's the same PHP app and MySQL database.</p>
+                    <p>Here we make use of PV and PVC for persistent data. Configmaps for app customization and data initialization. Services for internal app communication.</p>
+                    <p>More advanced users can make use of HELM to make managing K8S applications by allowing you to package, configure, deploy and upgrade consistently.</p>
+                    <p>At the moment the setup is made for local bare-metal K8S cluster. For future projects it will be expanded and deployed for AWS cloud environment.</p>
+                    <p>Project files and explanations are located in my github repo <a href="https://github.com/gkutsarov/k8s_php_mysql">here</a></p>
+                </div> <!-- end of div post-->
+            </div> <!-- end of div list-->
+        </div> <!-- END OF DIV PAGE-->
+    </div> <!-- END OF DIV CONTENT-->
+
+</body>
+</html>

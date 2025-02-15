@@ -49,6 +49,29 @@
                             <li>Manages node groups (on-demand and spot instances) for cost optimization.</li>
                         </ul>
                     </p>
+                    <p><b>AWS VPC</b>
+                        <ul>
+                            <li>Creates a VPC with a specified CIDR block.</li>
+                            <li>Defines public and private subnets for workload segregation.</li>
+                            <li>Supports NAT Gateway for private subnets to access the internet securely.</li>
+                            <li>Enables DNS internal service discovery.</li>
+                        </ul>
+                    </p>
+                    <p><b>AWS IAM Roles & Policies</b>
+                        <ul>
+                            <li>EKS Admin Role: Grants cluster admin access.</li>
+                            <li>Load Balancer Role: Manages AWS Load Balancer Controller.</li>
+                            <li>VPC CNI IRSA Role: Allows the VPC CNI plugin to operate securely.</li>
+                            <li>EBS CSI IRSA Role: Enables EBS CSI driver for persistent storage.</li>
+                        </ul>
+                    </p>
+                    <p><b>Terraform</b>
+                        <ul>
+                            <li>AWS Provider: Manages EKS, VPC, IAM and etc.</li>
+                            <li>Kubernetes Provider: Configures Kubernetes objects in the cluster.</li>
+                            <li>Helm Provider: Deploys Helm charts for add-ons like AWS Load Balancer Controller.</li>
+                        </ul>
+                    </p>
 
                     <p>Project files and explanations are located in my github repo <a href="https://github.com/gkutsarov/k8s_php_mysql">here</a></p>
                 </div> <!-- end of div post-->

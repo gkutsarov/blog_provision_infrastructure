@@ -45,8 +45,10 @@
 
                     <p class="subtitle">THE PROJECT</p>
                     <p>To demonstrate the capabilities of ArgoCD I have deployed it using Terraform(IaC) + official helm chart to my EKS cluster in AWS.</p>
-                    <p>First we deploy ArgoCD</p>
+                    <p>First we deploy our ArgoCD with Terraform as our IaC, utilizing the official Helm chart for ArgoCD.</p>
+                    <p>I am dynamically fetching the username and token for my GitHub account which adds my GitHub repositoy to ArgoCD during installation.</p>
                     <img src="../imgs/argocd_install.png">
+                    <p>Our next step is to "bootstrap" our cluster a.k.a make use of <b>app of apps</b> pattern.</p>
                     <p>The project also make use of Docker Compose which simplifies running multi-container Docker applications.</p>
                     <p>The final result is actually "live" and hosted on my EC2 instance. Obviously I use different user credentials than the ones listed in my github repo.</p>
                     <p>Check the docker based PHP and MySQL app <a href="http://gkutsarov.com:8080/">here</a></p>
